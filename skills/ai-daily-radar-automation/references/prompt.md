@@ -3,7 +3,7 @@
 Use this template when creating the Codex automation. Replace the placeholders before saving the automation.
 
 ```text
-Run an independent AI Daily Radar workflow without using or modifying any repository.
+Run an independent AI Daily Radar workflow. Generate the report, deliver it by Gmail, and archive the final Markdown report to the configured GitHub examples repository.
 
 Config:
 - `SOURCE_SKILL`: `aihot` / AI HOT skill by default. This may be replaced with another information-fetching skill if the user wants a different source.
@@ -12,6 +12,9 @@ Config:
 - `DELIVERY`: connected Gmail account.
 - `REPORT_RECIPIENT_EMAIL`: replace this with the email address that should receive the report.
 - `GMAIL_LABEL_NAME`: `AI Daily Radar` by default. Replace it if you use another Gmail label.
+- `GITHUB_ARCHIVE_REPO`: `https://github.com/SuperKatrina123/codex-automations.git`.
+- `GITHUB_ARCHIVE_BRANCH`: `main`.
+- `GITHUB_ARCHIVE_PATH`: `examples/ai-daily-radar-YYYY-MM-DD.md`.
 
 Goal:
 Fetch the past 24 hours of source items, clean and deduplicate them, filter for AI application-layer new movements, summarize 2-3 actionable trends, and generate one minimal practice plan I can try today. Keep the focus on application-layer trends and practical action, not generic news summaries.
@@ -23,6 +26,8 @@ Preflight check:
 - If no suitable source skill is installed or available, stop the workflow and tell me which skill is missing and how to install or replace it. Do not generate a report from memory or training data.
 - Verify that Gmail is connected before delivery.
 - If Gmail is unavailable, still generate the Markdown report in this thread and clearly state that Gmail delivery failed.
+- Verify that Git can access `GITHUB_ARCHIVE_REPO` before attempting to archive.
+- If GitHub archive push is unavailable, still send the Gmail report and clearly state that GitHub archive failed. Do not block Gmail delivery because GitHub push failed.
 
 The report must be Markdown optimized for Gmail readability. Use a strict, stable heading hierarchy so the email does not look messy:
 
@@ -75,5 +80,14 @@ Use 2-3 short bullets about what to watch next.
 
 Then send the resulting Markdown report through the connected Gmail account to `REPORT_RECIPIENT_EMAIL` with subject `AI Daily Radar - YYYY-MM-DD`. After sending, apply the Gmail label `GMAIL_LABEL_NAME` to the sent report email so it is associated with the user's daily radar mailbox label.
 
+After Gmail delivery, archive the same Markdown report to GitHub:
+
+1. Clone or update `GITHUB_ARCHIVE_REPO` on `GITHUB_ARCHIVE_BRANCH` outside any unrelated local project.
+2. Write the final Markdown report to `GITHUB_ARCHIVE_PATH`, replacing `YYYY-MM-DD` with the report date.
+3. Commit with message `Add AI Daily Radar YYYY-MM-DD`.
+4. Push to `GITHUB_ARCHIVE_BRANCH`.
+5. If the file already exists with identical content, do not create a new commit; report that the archive is already up to date.
+
 If Gmail sending is unavailable, reply in this thread with the Markdown report and clearly state that Gmail delivery failed. If the label application fails, still consider the report sent, but notify me with the Gmail labeling error.
+If GitHub archive push fails, still consider Gmail delivery complete, but notify me with the Git error and the local archive path if one was created.
 ```

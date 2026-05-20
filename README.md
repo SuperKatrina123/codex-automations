@@ -16,7 +16,7 @@
 
 | 工作流 | 文件 | 用途 |
 |---|---|---|
-| AI Daily Radar | `prompts/ai-daily-radar.md` | 工作日 AI 应用层雷达邮件：默认抓取过去 24 小时 AI HOT 精选源，也可替换成其他信息抓取 skill。 |
+| AI Daily Radar | `prompts/ai-daily-radar.md` | 工作日 AI 应用层雷达邮件：默认抓取过去 24 小时 AI HOT 精选源，也可替换成其他信息抓取 skill；发送后把 Markdown 报告归档到 `examples/`。 |
 | AI Daily Radar Installer | `skills/ai-daily-radar-automation/SKILL.md` | Codex Skill：检查信息源 skill、Gmail connector、收件人和标签变量，并创建或更新 Codex automation。 |
 
 ## 推荐用法
@@ -64,11 +64,13 @@ prompts/ai-daily-radar.md
 
 | 工作流 | 必需依赖 |
 |---|---|
-| AI Daily Radar | 一个可用的信息抓取 skill，默认是 `aihot` / AI HOT；Gmail connector |
+| AI Daily Radar | 一个可用的信息抓取 skill，默认是 `aihot` / AI HOT；Gmail connector；可推送到归档仓库的 Git 权限 |
 
 如果缺少信息抓取 skill，自动化应该停止执行并提示安装、启用或替换对应 skill，不应该凭过时知识编造内容。
 
 Gmail 推送依赖 Codex 环境里的 Gmail connector/app 授权，不需要 Chrome 插件。
+
+GitHub 归档依赖本地 Git 凭证能推送到 `SuperKatrina123/codex-automations`。如果归档失败，自动化仍应完成 Gmail 推送，并在当前线程报告 Git 错误。
 
 ## 隐私规则
 
